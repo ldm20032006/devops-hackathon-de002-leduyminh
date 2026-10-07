@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Hackathon - Quản lý sản phẩm (Shop)</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0f172a;
+            --accent: #10b981;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --radius: 14px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 860px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: #ffffff;
+            padding: 36px 32px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .content {
+            padding: 32px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-full {
+            grid-column: 1 / -1;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 18px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .card-title svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            padding: 6px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .value {
+            color: var(--text-main);
+            font-weight: 600;
+            text-align: right;
+            word-break: break-all;
+        }
+
+        .value a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .value a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .badge {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .description-box {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 18px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        .footer {
+            background: #f1f5f9;
+            border-top: 1px solid var(--border-color);
+            padding: 18px 32px;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            .content {
+                grid-template-columns: 1fr;
+                padding: 20px;
+                gap: 16px;
+            }
+
+            .header {
+                padding: 24px 16px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .value {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <span class="header-tag">DevOps Hackathon 2026</span>
+            <h1>Hệ thống Quản lý sản phẩm (Shop)</h1>
+            <p>Trang thông tin thí sinh và hạ tầng triển khai dịch vụ</p>
+        </header>
+
+        <main class="content">
+            <section class="card">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Thông tin sinh viên
+                </h2>
+                <ul class="info-list">
+                    <li class="info-item">
+                        <span class="label">Họ và tên:</span>
+                        <span class="value">Lê Duy Minh</span>
+                    </li>
+                    <li class="info-item">
+                        <span class="label">Mã số sinh viên:</span>
+                        <span class="value"><span class="badge">B24DTCN368</span></span>
+                    </li>
+                    <li class="info-item">
+                        <span class="label">Lớp:</span>
+                        <span class="value">CNTT1</span>
+                    </li>
+                    <li class="info-item">
+                        <span class="label">Email:</span>
+                        <span class="value"><a href="mailto:leduyminh2006k4@gmail.com">leduyminh2006k4@gmail.com</a></span>
+                    </li>
+                    <li class="info-item">
+                        <span class="label">Username GitHub:</span>
+                        <span class="value">devops-hackathon-de002-leduyminh</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Thông tin bài thi
+                </h2>
+                <ul class="info-list">
+                    <li class="info-item">
+                        <span class="label">Đề thi:</span>
+                        <span class="value"><span class="badge badge-success">Đề 002</span></span>
+                    </li>
+                    <li class="info-item">
+                        <span class="label">Chủ đề:</span>
+                        <span class="value">Quản lý sản phẩm (Shop)</span>
+                    </li>
+                    <li class="info-item">
+                        <span class="label">Cổng thông tin:</span>
+                        <span class="value">80</span>
+                    </li>
+                    <li class="info-item">
+                        <span class="label">Địa chỉ IP máy chủ:</span>
+                        <span class="value">221.121.4.81</span>
+                    </li>
+                    <li class="info-item">
+                        <span class="label">Ngày thi:</span>
+                        <span class="value">07/10/2026</span>
+                    </li>
+                    <li class="info-item">
+                        <span class="label">Link Repository:</span>
+                        <span class="value"><a href="https://github.com/ldm20032006/devops-hackathon-de002-leduyminh.git" target="_blank" rel="noopener noreferrer">devops-hackathon-de002-leduyminh.git</a></span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="card card-full">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    Giới thiệu hệ thống
+                </h2>
+                <div class="description-box">
+                    Hệ thống "Quản lý sản phẩm (Shop)" là giải pháp phần mềm tối ưu giúp theo dõi, phân loại và quản lý thông tin các mặt hàng một cách chính xác và hiệu quả. Nền tảng hỗ trợ cập nhật danh mục, số lượng tồn kho và giá bán theo thời gian thực nhằm nâng cao năng suất vận hành của cửa hàng. Được triển khai trên hạ tầng Nginx mạnh mẽ, hệ thống đảm bảo khả năng phản hồi nhanh chóng, tính ổn định và sẵn sàng cao.
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            &copy; 2026 Lê Duy Minh - B24DTCN368 - DevOps Hackathon. All rights reserved.
+        </footer>
+    </div>
+
+</body>
+</html>
